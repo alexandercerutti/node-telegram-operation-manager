@@ -1,0 +1,17 @@
+{
+  "name": "node-telegram-operation-manager",
+  "version": "1.0.0",
+  "description": "A suite to manage replies and operations in telegram bot written in node.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "node",
+    "telegram",
+    "bot",
+    "api"
+  ],
+  "author": "Alexander P. Cerutti",
+  "license": "MIT"
+}
