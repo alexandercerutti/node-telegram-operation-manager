@@ -3,7 +3,9 @@ import QueueManager from "./queue_manager";
 
 
 export default class ReplyManager extends QueueManager<Reply> {
-	constructor() { super(); }
+	constructor() {
+		super();
+	}
 
 	/**
 	 * Returns pending replies that match against parameter.
@@ -23,8 +25,10 @@ export default class ReplyManager extends QueueManager<Reply> {
 	 * @returns {number} - the amount of actions added under a specific identifier.
 	 */
 
-	add(id: Hashable, command: string, action: Function): number {
-		return this.push({ id, command, action });
+	add(id: Hashable, action: Function): this {
+		this.push({ id, action });
+
+		return this;
 	}
 
 	/**
@@ -32,8 +36,10 @@ export default class ReplyManager extends QueueManager<Reply> {
 	 * @param id
 	 */
 
-	cancelAll(id: Hashable): void {
+	cancelAll(id: Hashable): this {
 		this.removeAll(id);
+
+		return this;
 	}
 
 	/**
