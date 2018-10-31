@@ -1,9 +1,10 @@
 export interface QueueObject {
-	id: Hashable,
-	command: string
+	id: Hashable
 }
 
-export interface Operation extends QueueObject { }
+export interface Operation extends QueueObject {
+	command: string
+}
 
 export interface Reply extends QueueObject {
 	action: Function,
