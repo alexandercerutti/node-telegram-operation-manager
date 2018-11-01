@@ -2,6 +2,10 @@ import bot from "./bot";
 import ReplyManager from "../src/reply_manager";
 import { MessageEntity } from "node-telegram-bot-api";
 
+//*************************//
+//* EXECUTE THIS, TRUST ME*//
+//*************************//
+
 const reply = new ReplyManager();
 
 bot.onText(/\/multireply/, (message) => {
@@ -11,17 +15,17 @@ bot.onText(/\/multireply/, (message) => {
 	// Command is an arbitrary string and optional string
 	// If you don't want to pass a command, set it as empty
 	reply
-		.add(message.from.id, (someData?: any) => {
+		.register(message.from.id, (someData?: any) => {
 			bot.sendMessage(message.from.id, "Great! Now send me another message.");
 		})
-		.add(message.from.id, (someData?: any) => {
+		.register(message.from.id, (someData?: any) => {
 			let nextText = "See? You can register your replies easily but setting in your message listener the following check."
 				+ "\nAssuming you are using [node-telegram-bot-api](https://github.com/yagop/node-telegram-bot-api) and you istantiated globally ReplyManager, you can do it by:"
 				+ "\n\n```"
 				+ "\nconst reply = new ReplyManager();"
 				+ "\nbot.on(\"message\", (msg) => {"
 				+ "\n\t// this requires the id and let you push optional data in form of object."
-				+ "\n\tif (reply.pending(message.from.id).length > 0) {"
+				+ "\n\tif (reply.expects(msg.from.id)) {"
 				+ "\n\t\tlet { text, entities } = msg;"
 				+ "\n\t\treply.execute(msg.from.id, { text, entities });"
 				+ "\n\t}"
@@ -30,7 +34,7 @@ bot.onText(/\/multireply/, (message) => {
 
 			bot.sendMessage(message.from.id, nextText, { parse_mode: "Markdown", disable_web_page_preview: true });
 		})
-		.add(message.from.id, (someData?: any) => {
+		.register(message.from.id, (someData?: any) => {
 			let nextText: string;
 			if (someData.text === "I love replies") {
 				nextText = "✔ Good! Conditional checks can use optional data that can be passed at your own discretion."
@@ -54,7 +58,7 @@ bot.onText(/\/multireply/, (message) => {
 				return false;
 			}
 		})
-		.add(message.from.id, (someData?: any) => {
+		.register(message.from.id, (someData?: any) => {
 			if (someData.text !== "Show me potatoes!") {
 				bot.sendMessage(message.from.id, "Nope! The next is not correct! Try again.");
 				return false;
@@ -67,7 +71,7 @@ bot.onText(/\/multireply/, (message) => {
 
 			bot.sendMessage(message.from.id, nextText, { parse_mode: "Markdown" });
 		})
-		.add(message.from.id, (someData?: any) => {
+		.register(message.from.id, (someData?: any) => {
 			bot.sendMessage(message.from.id, "You are the best! Start now by looking at the documentation. 😉 Hope you have enjoyed the tutorial!");
 		});
 });
@@ -75,7 +79,7 @@ bot.onText(/\/multireply/, (message) => {
 bot.on("message", (msg) => {
 	// this requires the id and let you push optional data in form of object.
 
-	if (!hasEntity("bot_command", msg.entities) && reply.pending(msg.from.id).length) {
+	if (!hasEntity("bot_command", msg.entities) && reply.expects(msg.from.id)) {
 		let { text, entities } = msg;
 		reply.execute(msg.from.id, { text, entities });
 	}
