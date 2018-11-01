@@ -34,7 +34,7 @@ export default class OperationManager extends QueueManager<Operation> {
 	 * @returns {any | undefined} - the result of the callback or none.
 	 */
 
-	add(id: Hashable, command: string, callback?: Function): any | undefined {
+	register(id: Hashable, command: string, callback?: Function): any | undefined {
 		this.push({ id, command });
 
 		if (typeof callback === "function") {
