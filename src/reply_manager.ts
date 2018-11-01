@@ -25,7 +25,7 @@ export default class ReplyManager extends QueueManager<Reply> {
 	 * @returns {number} - the amount of actions added under a specific identifier.
 	 */
 
-	add(id: Hashable, action: Function): this {
+	register(id: Hashable, action: Function): this {
 		this.push({ id, action });
 
 		return this;
@@ -57,7 +57,7 @@ export default class ReplyManager extends QueueManager<Reply> {
 	 * @returns {boolean}
 	 */
 
-	expectsReply(id: Hashable): boolean {
+	expects(id: Hashable): boolean {
 		return this.has(value => value.id === id);
 	}
 
@@ -68,7 +68,7 @@ export default class ReplyManager extends QueueManager<Reply> {
 	 *
 	 */
 
-	execute(id: Hashable, data: ReplyData) {
+	execute(id: Hashable, data: ReplyData = {}) {
 		let next: Reply = this.get(e => e.id === id);
 		let callback: Function = next.action;
 
@@ -100,7 +100,7 @@ export default class ReplyManager extends QueueManager<Reply> {
 	 */
 
 	skip(id: Hashable): boolean {
-		if (!this.pending(id).length) {
+		if (!this.expects(id)) {
 			return false;
 		}
 
