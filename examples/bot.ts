@@ -6,4 +6,8 @@ if (process.argv.length < 3) {
 	process.exit(1);
 }
 
-export default new TelegramBot(process.argv[2], { polling: true });
+const bot = new TelegramBot(process.argv[2], { polling: true });
+
+bot.on("polling_error", (msg) => console.log(msg));
+
+export default bot;

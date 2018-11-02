@@ -85,8 +85,6 @@ bot.on("message", (msg) => {
 	}
 });
 
-bot.on("polling_error", (msg) => console.log(msg));
-
 function hasEntity(entity: string, entities?: MessageEntity[]) {
 	if (!entities || !entities.length) {
 		return false;
