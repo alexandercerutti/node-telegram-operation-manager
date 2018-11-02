@@ -1,19 +1,20 @@
-export interface QueueObject {
-	id: Hashable
+export interface QueueObject<T> {
+	[key: string]: T[]
 }
 
-export interface Operation extends QueueObject {
-	command: string
-}
-
-export interface Reply extends QueueObject {
-	action: Function,
-	previousData?: any
-}
+//export type Reply = QueueObject<ReplyDescriptor>;
+//export type Operation = QueueObject<OperationDescriptor>;
+export type Hashable = number | string;
 
 export interface ReplyData {
 	[key: string]: any
 }
 
-export type Hashable = number | string;
-export type matchCriteria<T> = (value: T, index?: number, array?: T[]) => boolean;
+export interface Operation {
+	command: string
+}
+
+export interface Reply {
+	action: Function,
+	previousData?: any
+}
