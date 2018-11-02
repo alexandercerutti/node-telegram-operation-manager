@@ -4,7 +4,8 @@
   "description": "A suite to manage replies and operations in telegram bot written in node.js",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "reply": "node examples/reply.js",
+    "operation": "node examples/operation.js"
   },
   "keywords": [
     "node",
@@ -13,5 +14,9 @@
     "api"
   ],
   "author": "Alexander P. Cerutti",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node-telegram-bot-api": "^0.30.3",
+    "node-telegram-bot-api": "^0.30.0"
+  }
 }
