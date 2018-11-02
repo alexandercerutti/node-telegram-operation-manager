@@ -9,35 +9,6 @@ export default class OperationManager extends QueueManager<Operation> {
 	}
 
 	/**
-	 * Fetches all the current active operations
-	 * @param id
-	 */
-
-	onGoing(id: Hashable): Operation[] {
-		return this.all(id);
-	}
-
-	/**
-	 * Checks if there is at least one of active operation that matches the id.
-	 * @param id
-	 * @returns {boolean}
-	 */
-
-	hasActive(id: Hashable): boolean {
-		return this.has(id);
-	}
-
-	/**
-	 * Terminates the current action with a specific id.
-	 * @param id
-	 * @returns {Operation} - The removed Operation object.
-	 */
-
-	end(id: Hashable): Operation {
-		return this.remove(id);
-	}
-
-	/**
 	 * Pushes a new operation in the queue.
 	 * @param id
 	 * @param command
@@ -56,6 +27,35 @@ export default class OperationManager extends QueueManager<Operation> {
 		if (typeof action === "function") {
 			return action();
 		}
+	}
+
+	/**
+	 * Terminates the current action with a specific id.
+	 * @param id
+	 * @returns {Operation} - The removed Operation object.
+	 */
+
+	end(id: Hashable): Operation {
+		return this.remove(id);
+	}
+
+	/**
+	 * Fetches all the current active operations
+	 * @param id
+	 */
+
+	onGoing(id: Hashable): Operation[] {
+		return this.all(id);
+	}
+
+	/**
+	 * Checks if there is at least one of active operation that matches the id.
+	 * @param id
+	 * @returns {boolean}
+	 */
+
+	hasActive(id: Hashable): boolean {
+		return this.has(id);
 	}
 
 	/**

@@ -7,16 +7,6 @@ export default class ReplyManager extends QueueManager<Reply> {
 	}
 
 	/**
-	 * Returns pending replies that match against parameter.
-	 * @param id - queue identifier
-	 * @returns {Reply[]}
-	 */
-
-	pending(id: Hashable): Reply[] {
-		return this.all(id);
-	}
-
-	/**
 	 * Adds a new reply to the list
 	 * @param id - identifier of the new element
 	 * @param command - relative command
@@ -106,12 +96,21 @@ export default class ReplyManager extends QueueManager<Reply> {
 	}
 
 	/**
+	 * Returns pending replies that match against parameter.
+	 * @param id - queue identifier
+	 * @returns {Reply[]}
+	 */
+
+	pending(id: Hashable): Reply[] {
+		return this.all(id);
+	}
+
+	/**
 	 * Removes first Reply occurence in the queue with a specific ID.
 	 * @param id
 	 */
 
 	private pull(id: Hashable) {
-		// removes the first value with specific id.
 		this.remove(id);
 	}
 }
