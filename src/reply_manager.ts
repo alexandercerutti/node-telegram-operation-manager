@@ -1,7 +1,6 @@
 import { Reply, Hashable, ReplyData } from "./model";
 import QueueManager from "./queue_manager";
 
-
 export default class ReplyManager extends QueueManager<Reply> {
 	constructor() {
 		super();
@@ -14,7 +13,7 @@ export default class ReplyManager extends QueueManager<Reply> {
 	 */
 
 	pending(id: Hashable): Reply[] {
-		return this.all(value => value.id === id);
+		return this.all(id);
 	}
 
 	/**
@@ -26,7 +25,7 @@ export default class ReplyManager extends QueueManager<Reply> {
 	 */
 
 	register(id: Hashable, action: Function): this {
-		this.push({ id, action });
+		this.push(id, { action });
 
 		return this;
 	}
@@ -38,17 +37,16 @@ export default class ReplyManager extends QueueManager<Reply> {
 
 	cancelAll(id: Hashable): this {
 		this.removeAll(id);
-
 		return this;
 	}
 
 	/**
-	 * Pops the last reply from the queue of a specific user.
+	 * Pops out the last reply from the queue of a specific user.
 	 * @param id
 	 */
 
 	pop(id: Hashable): Reply {
-		return this.removeBack(id);
+		return super.pop(id);
 	}
 
 	/**
@@ -58,7 +56,7 @@ export default class ReplyManager extends QueueManager<Reply> {
 	 */
 
 	expects(id: Hashable): boolean {
-		return this.has(value => value.id === id);
+		return this.has(id);
 	}
 
 	/**
@@ -69,9 +67,10 @@ export default class ReplyManager extends QueueManager<Reply> {
 	 */
 
 	execute(id: Hashable, data: ReplyData = {}) {
-		let next: Reply = this.get(e => e.id === id);
+		let next: Reply = this.get(id);
 		let callback: Function = next.action;
 
+		// Passing the previous data to the function
 		data.previousData = next.previousData || undefined;
 
 		let result = callback(data);
@@ -80,16 +79,14 @@ export default class ReplyManager extends QueueManager<Reply> {
 		if (result !== false) {
 			// Removing
 			this.pull(id);
+			let nextReply = this.get(id)
 
-			let secondNext = this.get(value => value.id === id)
-
-			if (!secondNext) {
+			// this.get returns an empty object if there is no other reply in the id's queue.
+			if (!Object.keys(nextReply).length) {
 				return;
 			}
 
-			if (result !== undefined) {
-				secondNext.previousData = result;
-			}
+			nextReply.previousData = result;
 		}
 	}
 
@@ -115,6 +112,6 @@ export default class ReplyManager extends QueueManager<Reply> {
 
 	private pull(id: Hashable) {
 		// removes the first value with specific id.
-		this.remove(value => value.id === id);
+		this.remove(id);
 	}
 }

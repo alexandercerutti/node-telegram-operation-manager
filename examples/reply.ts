@@ -19,7 +19,7 @@ bot.onText(/\/multireply/, (message) => {
 			bot.sendMessage(message.from.id, "Great! Now send me another message.");
 		})
 		.register(message.from.id, (someData?: any) => {
-			let nextText = "See? You can register your replies easily but setting in your message listener the following check."
+			let nextText = "See? You can register your replies easily by setting in your message listener the following check."
 				+ "\nAssuming you are using [node-telegram-bot-api](https://github.com/yagop/node-telegram-bot-api) and you istantiated globally ReplyManager, you can do it by:"
 				+ "\n\n```"
 				+ "\nconst reply = new ReplyManager();"
@@ -37,8 +37,8 @@ bot.onText(/\/multireply/, (message) => {
 		.register(message.from.id, (someData?: any) => {
 			let nextText: string;
 			if (someData.text === "I love replies") {
-				nextText = "✔ Good! Conditional checks can use optional data that can be passed at your own discretion."
-					+ "\nThis is how you can set them:"
+				nextText = "✔ Good! Conditional checks can use optional data that can be passed at your own discretion through `reply.execute()` (as above)"
+					+ "\n\nThis is how you can set them:"
 					+ "\n\n\t\`.add(identifier, (someData?: any) => { ... })\`"
 					+ "\n\nYou can also set some data to be passed (or accumulated) through replies."
 					+ " Instead of returning _false_ or _undefined_, return any value you want."

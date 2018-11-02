@@ -2,8 +2,19 @@ import { Hashable, Operation } from "./model";
 import QueueManager from "./queue_manager";
 
 export default class OperationManager extends QueueManager<Operation> {
+	public maxConcurrent = 1
+
 	constructor() {
 		super();
+	}
+
+	/**
+	 * Fetches all the current active operations
+	 * @param id
+	 */
+
+	onGoing(id: Hashable): Operation[] {
+		return this.all(id);
 	}
 
 	/**
@@ -13,32 +24,37 @@ export default class OperationManager extends QueueManager<Operation> {
 	 */
 
 	hasActive(id: Hashable): boolean {
-		return this.has(value => value.id === id);
+		return this.has(id);
 	}
 
 	/**
-	 * Cancels the current action with a specific id.
+	 * Terminates the current action with a specific id.
 	 * @param id
 	 * @returns {Operation} - The removed Operation object.
 	 */
 
-	cancel(id: Hashable): Operation {
-		return this.remove(op => op.id === id);
+	end(id: Hashable): Operation {
+		return this.remove(id);
 	}
 
 	/**
 	 * Pushes a new operation in the queue.
 	 * @param id
 	 * @param command
-	 * @param callback - action to be executed straight after the pushing.
+	 * @param action - action to be executed straight after the pushing.
 	 * @returns {any | undefined} - the result of the callback or none.
 	 */
 
-	register(id: Hashable, command: string, callback?: Function): any | undefined {
-		this.push({ id, command });
+	register(id: Hashable, command: string, action?: Function): any | undefined {
+		if (this.maxConcurrent > 0 && this.onGoing(id).length === this.maxConcurrent) {
+			console.error("Operation: maxConcurrent operation reached. No more ops will be added to the queue.");
+			return;
+		}
 
-		if (typeof callback === "function") {
-			return callback();
+		this.push(id, { command });
+
+		if (typeof action === "function") {
+			return action();
 		}
 	}
 
