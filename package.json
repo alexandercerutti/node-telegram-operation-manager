@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "reply": "node examples/reply.js",
-    "operation": "node examples/operation.js"
+    "prereply": "tsc",
+    "operations": "node examples/operations.js",
+    "preoperations": "tsc"
   },
   "keywords": [
     "node",
