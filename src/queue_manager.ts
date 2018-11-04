@@ -86,9 +86,16 @@ export default class QueueManager<T> {
 	 */
 
 	protected emptyQueue(id?: Hashable): number {
-		let queueLen = (id ? this._queue[id] : Object.keys(this._queue)).length;
+		let queueLen: number;
 
-		this._queue = <QueueObject<T>>{};
+		if (id && this._queue[id]) {
+			queueLen = this._queue[id].length;
+			delete this._queue[id];
+		} else {
+			queueLen = Object.keys(this._queue).length;
+			this._queue = <QueueObject<T>>{};
+		}
+
 		return queueLen;
 	}
 }
