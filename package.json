@@ -7,13 +7,15 @@
     "reply": "node examples/reply.js",
     "prereply": "tsc",
     "operations": "node examples/operations.js",
-    "preoperations": "tsc"
+    "preoperations": "tsc",
+    "prepublish": "tsc"
   },
   "keywords": [
     "node",
     "telegram",
     "bot",
-    "api"
+    "api",
+    "reply"
   ],
   "author": "Alexander P. Cerutti",
   "license": "MIT",
