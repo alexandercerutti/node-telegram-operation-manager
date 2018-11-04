@@ -49,13 +49,25 @@ export default class OperationManager extends QueueManager<Operation> {
 	}
 
 	/**
-	 * Checks if there is at least one of active operation that matches the id.
+	 * Checks if there is at least one of active operation that matches the id
+	 * by checking if the amount is lower than the concurrent maximum.
 	 * @param id
 	 * @returns {boolean}
 	 */
 
 	hasActive(id: Hashable): boolean {
 		return this.has(id);
+	}
+
+	/**
+	 * Checks amount of active operations against the limit
+	 * @param id
+	 * @returns {boolean} The result in boolean
+	 */
+
+	hasReachedMaximum(id: Hashable) {
+		const opsAmount = this.all(id).length;
+		return opsAmount > 0 && opsAmount <= this.maxConcurrent;
 	}
 
 	/**
