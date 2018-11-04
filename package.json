@@ -19,6 +19,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/node-telegram-bot-api": "^0.30.3",
-    "node-telegram-bot-api": "^0.30.0"
+    "node-telegram-bot-api": "^0.30.0",
+    "node-telegram-keyboard-wrapper": "^2.0.0"
   }
 }

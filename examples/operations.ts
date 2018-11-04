@@ -2,6 +2,7 @@ import bot from "./bot";
 import { MessageEntity } from "node-telegram-bot-api";
 import { ReplyManager, OperationManager } from "..";
 import { ReplyData } from "../src/model";
+import { ReplyKeyboard } from "node-telegram-keyboard-wrapper";
 
 //*************************//
 //* EXECUTE THIS, TRUST ME*//
@@ -9,6 +10,12 @@ import { ReplyData } from "../src/model";
 
 const Opm = new OperationManager();
 const reply = new ReplyManager();
+
+const keyboards = [
+	new ReplyKeyboard("Show me how!"),
+	new ReplyKeyboard("Show me more"),
+	new ReplyKeyboard("How can I do that?"),
+];
 
 bot.onText(/\/operations/, (message) => {
 	if (Opm.hasReachedMaximum(message.from.id)) {
@@ -24,7 +31,12 @@ bot.onText(/\/operations/, (message) => {
 			+ "\nTherefore, this system may be good if combined with replies."
 			+ "\n\nSend me *Show me how!* to discover.";
 
-		bot.sendMessage(message.from.id, messageText, { parse_mode: "Markdown" });
+		bot.sendMessage(message.from.id, messageText, Object.assign({
+			parse_mode: "Markdown"
+		},
+			keyboards[0].open({
+				resize_keyboard: true
+			})));
 
 		reply
 			.register(message.from.id, (someData?: ReplyData) => {
@@ -48,7 +60,14 @@ bot.onText(/\/operations/, (message) => {
 					+ "\n\nEasy, isn't it? 😉"
 					+ "\nSend me *Show me more* to continue.";
 
-				bot.sendMessage(message.from.id, nextText, { parse_mode: "Markdown", disable_web_page_preview: true });
+				bot.sendMessage(message.from.id, nextText, Object.assign({
+					parse_mode: "Markdown",
+					disable_web_page_preview: true
+				},
+					keyboards[1].open({
+						resize_keyboard: true
+					})
+				));
 			})
 			.register(message.from.id, (someData?: ReplyData) => {
 				if (someData.text !== "Show me more") {
@@ -65,7 +84,7 @@ bot.onText(/\/operations/, (message) => {
 					+ "\n\nWhat is Maximum? And what if you want to let different actions to be executed at the same time?"
 					+ "\nSend me *How can I do that?* to discover.";
 
-				bot.sendMessage(message.from.id, nextText, { parse_mode: "Markdown" });
+				bot.sendMessage(message.from.id, nextText, Object.assign({ parse_mode: "Markdown" }, keyboards[2].open({ resize_keyboard: true })));
 			})
 			.register(message.from.id, (someData?: ReplyData) => {
 				if (someData.text !== "How can I do that?") {
@@ -79,7 +98,7 @@ bot.onText(/\/operations/, (message) => {
 					+ "\n\nSet it to 0 to allow infinite operations."
 					+ "\n\n\nHope you enjoyed this tutorial. 😉 Thank you for using **operation-manager**."
 
-				bot.sendMessage(message.from.id, nextText, { parse_mode: "Markdown" });
+				bot.sendMessage(message.from.id, nextText, Object.assign({ parse_mode: "Markdown" }, keyboards[2].close()));
 			});
 	});
 });

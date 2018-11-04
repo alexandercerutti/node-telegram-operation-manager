@@ -1,12 +1,18 @@
 import bot from "./bot";
 import ReplyManager from "../src/reply_manager";
 import { MessageEntity } from "node-telegram-bot-api";
+import { ReplyKeyboard } from "node-telegram-keyboard-wrapper";
 
 //*************************//
 //* EXECUTE THIS, TRUST ME*//
 //*************************//
 
 const reply = new ReplyManager();
+const keyboards = [
+	new ReplyKeyboard("I hate replies"),
+	(new ReplyKeyboard()).addRow("I hate replies", "I love replies"),
+	new ReplyKeyboard("Show me potatoes!")
+];
 
 bot.onText(/\/multireply/, (message) => {
 	bot.sendMessage(message.from.id, `Hey there! 😎 Some replies got registered! Follow my instructions to discover how this works. Send me a message now!`);
@@ -32,10 +38,24 @@ bot.onText(/\/multireply/, (message) => {
 				+ "\n});```"
 				+ "\n\nNow send me this text: \"I hate replies\"";
 
-			bot.sendMessage(message.from.id, nextText, { parse_mode: "Markdown", disable_web_page_preview: true });
+			let messageOpts = Object.assign({
+				parse_mode: "Markdown",
+				disable_web_page_preview: true
+			}, keyboards[0].open({ resize_keyboard: true }));
+
+			bot.sendMessage(message.from.id, nextText, messageOpts);
 		})
 		.register(message.from.id, (someData?: any) => {
 			let nextText: string;
+
+			const messageOpts1 = Object.assign({
+				parse_mode: "Markdown",
+			}, keyboards[1].open({ resize_keyboard: true }));
+
+			const messageOpts2 = Object.assign({
+				parse_mode: "Markdown",
+			}, keyboards[2].open({ resize_keyboard: true }));
+
 			if (someData.text === "I love replies") {
 				nextText = "✔ Good! Conditional checks can use optional data that can be passed at your own discretion through `reply.execute()` (as above)"
 					+ "\n\nThis is how you can set them:"
@@ -45,7 +65,7 @@ bot.onText(/\/multireply/, (message) => {
 					+ "\nFor this example, I'm going to return an object with a property called \"potatoes\"."
 					+ "\n\nNow send me another message with written inside *Show me potatoes!*.";
 
-				bot.sendMessage(message.from.id, nextText, { parse_mode: "Markdown" });
+				bot.sendMessage(message.from.id, nextText, messageOpts2);
 				return {
 					potatoes: "I like them fried!"
 				}
@@ -54,7 +74,7 @@ bot.onText(/\/multireply/, (message) => {
 					+ "\n\nYou can make repeat a reply until it satisfies your conditions by returning \"false\" inside the function."
 					+ "\n\nNow try again. This time try to send me both \"I have replies\" (again) and \"I love replies\" and see what happen.";
 
-				bot.sendMessage(message.from.id, nextText);
+				bot.sendMessage(message.from.id, nextText, messageOpts1);
 				return false;
 			}
 		})
@@ -69,7 +89,7 @@ bot.onText(/\/multireply/, (message) => {
 				+ "\nAwesome! Isn't it?"
 				+ "\n\nNow send me another message!";
 
-			bot.sendMessage(message.from.id, nextText, { parse_mode: "Markdown" });
+			bot.sendMessage(message.from.id, nextText, keyboards[2].close());
 		})
 		.register(message.from.id, (someData?: any) => {
 			bot.sendMessage(message.from.id, "You are the best! Start now by looking at the documentation. 😉 Hope you have enjoyed the tutorial!");
