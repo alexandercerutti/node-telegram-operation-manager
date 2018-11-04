@@ -2,7 +2,7 @@ import { Hashable, Operation } from "./model";
 import QueueManager from "./queue_manager";
 
 export default class OperationManager extends QueueManager<Operation> {
-	public maxConcurrent = 1
+	private _maxConcurrent = 1
 
 	constructor() {
 		super();
@@ -17,8 +17,8 @@ export default class OperationManager extends QueueManager<Operation> {
 	 */
 
 	register(id: Hashable, command: string, action?: Function): any | undefined {
-		if (this.maxConcurrent > 0 && this.onGoing(id).length === this.maxConcurrent) {
-			console.error("Operation: maxConcurrent operation reached. No more ops will be added to the queue.");
+		if (this._maxConcurrent > 0 && this.onGoing(id).length === this._maxConcurrent) {
+			console.error("Operation: _maxConcurrent operation reached. No more ops will be added to the queue.");
 			return;
 		}
 
@@ -71,7 +71,7 @@ export default class OperationManager extends QueueManager<Operation> {
 
 	hasReachedMaximum(id: Hashable) {
 		const opsAmount = this.all(id).length;
-		return opsAmount > 0 && opsAmount <= this.maxConcurrent;
+		return opsAmount > 0 && opsAmount <= this._maxConcurrent;
 	}
 
 	/**
@@ -82,5 +82,13 @@ export default class OperationManager extends QueueManager<Operation> {
 	empty(): boolean {
 		this.emptyQueue();
 		return true;
+	}
+
+	set maxConcurrent(newValue: number) {
+		if (typeof newValue !== "number") {
+			return;
+		}
+
+		this._maxConcurrent = newValue;
 	}
 }
