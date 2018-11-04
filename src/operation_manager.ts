@@ -75,12 +75,13 @@ export default class OperationManager extends QueueManager<Operation> {
 	}
 
 	/**
-	 * Fully empty Operation queue.
-	 * @returns {boolean}
+	 * Fully empty Operation queue for a specific user
+	 * @param id
+	 * @returns boolean
 	 */
 
-	empty(): boolean {
-		this.emptyQueue();
+	empty(id: Hashable): boolean {
+		this.emptyQueue(id);
 		return true;
 	}
 
