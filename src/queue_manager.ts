@@ -40,6 +40,26 @@ export default class QueueManager<T> {
 	}
 
 	/**
+	 * Removes an element from a specific queue through a criteria
+	 * @param id - queue identifier
+	 * @param criteria - Function to be used to find the element
+	 * @returns boolean
+	 */
+
+	protected cherryPickRemove(id: Hashable, criteria: (value) => boolean): T {
+		let elementIndex = this._queue[id].findIndex(criteria);
+
+		if (elementIndex === -1) {
+			return <T>{};
+		}
+
+		let element = this._queue[id][elementIndex];
+
+		this._queue[id].splice(elementIndex, 1);
+		return element;
+	}
+
+	/**
 	 * Checks if a queue has any objects
 	 * @param id
 	 */

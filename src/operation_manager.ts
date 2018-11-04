@@ -35,7 +35,11 @@ export default class OperationManager extends QueueManager<Operation> {
 	 * @returns {Operation} - The removed Operation object.
 	 */
 
-	end(id: Hashable): Operation {
+	end(id: Hashable, commandName?: string): Operation {
+		if (commandName) {
+			return this.cherryPickRemove(id, (value) => value.command === commandName);
+		}
+
 		return this.remove(id);
 	}
 

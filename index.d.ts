@@ -27,6 +27,14 @@ declare class QueueManager<T> {
 	protected removeAll(id: Hashable): void;
 
 	/**
+	 * Removes an element by searching for it using a criteria, like a cherry pick.
+	 * @param id
+	 * @param criteria
+	 */
+
+	protected cherryPickRemove(id: Hashable, criteria: (value) => boolean): T;
+
+	/**
 	 * Checks if there are elements in queue that match
 	 * with the criteria.
 	 * @param criteria
@@ -137,6 +145,8 @@ declare class ReplyManager extends QueueManager<Reply> {
 
 declare class OperationManager extends QueueManager<Operation> {
 
+	public maxConcurrent: number;
+
 	/**
 	 * Adds a new operation to the queue.
 	 * @param id
@@ -147,12 +157,13 @@ declare class OperationManager extends QueueManager<Operation> {
 	public register(id: Hashable, command: string, callback?: Function): any;
 
 	/**
-	 * Cancels the current action for a specific id
+	 * Cancels the current action or a specific action for a specific id
 	 * @param id
+	 * @param commandName - name to be used to identify a specific element to be removed.
 	 * @return {Operations} - the cancelled operation
 	 */
 
-	public end(id: Hashable): Operation;
+	public end(id: Hashable, commandName?: string): Operation;
 
 	/**
 	 * Fetches all the current queued operations for a specific identifier.
