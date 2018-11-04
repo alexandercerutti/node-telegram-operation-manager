@@ -8,7 +8,7 @@
     "prereply": "tsc",
     "operations": "node examples/operations.js",
     "preoperations": "tsc",
-    "prepublish": "tsc",
+    "prepublishOnly": "tsc",
     "test": "jasmine --config=tests/support/jasmine.json",
     "pretest": "tsc"
   },
