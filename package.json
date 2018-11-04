@@ -8,7 +8,9 @@
     "prereply": "tsc",
     "operations": "node examples/operations.js",
     "preoperations": "tsc",
-    "prepublish": "tsc"
+    "prepublish": "tsc",
+    "test": "jasmine --config=tests/support/jasmine.json",
+    "pretest": "tsc"
   },
   "keywords": [
     "node",
@@ -21,6 +23,8 @@
   "license": "MIT",
   "devDependencies": {
     "@types/node-telegram-bot-api": "^0.30.3",
+    "jasmine": "^3.3.0",
+    "@types/jasmine": "^2.8.9",
     "node-telegram-bot-api": "^0.30.0",
     "node-telegram-keyboard-wrapper": "^2.0.0"
   }
