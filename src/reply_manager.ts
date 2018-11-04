@@ -68,7 +68,7 @@ export default class ReplyManager extends QueueManager<Reply> {
 		// Must not be removed if result is specifically false.
 		if (result !== false) {
 			// Removing
-			this.pull(id);
+			this.remove(id);
 			let nextReply = this.get(id)
 
 			// this.get returns an empty object if there is no other reply in the id's queue.
@@ -103,14 +103,5 @@ export default class ReplyManager extends QueueManager<Reply> {
 
 	pending(id: Hashable): Reply[] {
 		return this.all(id);
-	}
-
-	/**
-	 * Removes first Reply occurence in the queue with a specific ID.
-	 * @param id
-	 */
-
-	private pull(id: Hashable) {
-		this.remove(id);
 	}
 }

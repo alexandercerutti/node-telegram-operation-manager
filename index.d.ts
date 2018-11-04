@@ -134,13 +134,6 @@ declare class ReplyManager extends QueueManager<Reply> {
 	 */
 
 	public pending(id: Hashable): Reply[];
-
-	/**
-	* Removes first occurence in id's queue
-	 * @param id
-	 */
-
-	private pull(id: Hashable): void;
 }
 
 declare class OperationManager extends QueueManager<Operation> {
