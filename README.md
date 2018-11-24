@@ -52,11 +52,10 @@ They are structured to be a step-by-step examples in a chat with a bot you will 
 
 ```sh
 # ==================================#
-# Execute these commands two before #
+# Execute these two commands before #
 # ==================================#
 
 # Go to project folder - assuming you installed it as module.
-
 $ cd node_modules/node-telegram-operation-manager
 
 # Development packages
