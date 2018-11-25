@@ -22,8 +22,6 @@ describe("Operation Manager", () => {
 		expect(opm.onGoing("001").length).toBe(0);
 	});
 
-	it("hasReachedMaximum number of operations")
-
 	it("Ending one of two actions without name", () => {
 		opm.maxConcurrent = 2;
 		opm.register("001", "test1");
