@@ -56,7 +56,7 @@ export default class ReplyManager extends QueueManager<Reply> {
 	 *
 	 */
 
-	execute(id: Hashable, data: ReplyData = {}) {
+	execute(id: Hashable, data: ReplyData = {}): void {
 		let next: Reply = this.get(id);
 		let callback: Function = next.action;
 

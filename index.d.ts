@@ -1,181 +1,198 @@
-import { QueueObject, Hashable, Reply, Operation, ReplyData } from "./src/model";
+declare module "node-telegram-operation-manager" {
+	interface QueueObject<T> {
+		[key: string]: T[]
+	}
 
-declare class QueueManager<T> {
-	/**
-	 * Pushes the element into the queue.
-	 * @param element
-	 * @returns {number} - The amount of elements inside
-	 * the queue for the same id (element.id)
-	 */
+	interface Operation {
+		command: string
+	}
 
-	protected push(id: Hashable, object: T): number;
+	interface ReplyData {
+		[key: string]: any
+	}
 
-	/**
-	 * Removes from the queue the first element that matches
-	 * the provided predicate.
-	 * @param criteria
-	 * @returns {T} - The removed element
-	 */
+	interface Reply {
+		action: Function,
+		previousData?: any
+	}
 
-	protected remove(id: Hashable): T;
+	class QueueManager<T> {
+		/**
+		 * Pushes the element into the queue.
+		 * @param element
+		 * @returns {number} - The amount of elements inside
+		 * the queue for the same id (element.id)
+		 */
 
-	/**
-	 * Removes all the element that match with the provided id.
-	 * @param id
-	 */
+		protected push(id: number | string, object: T): number;
 
-	protected removeAll(id: Hashable): void;
+		/**
+		 * Removes from the queue the first element that matches
+		 * the provided predicate.
+		 * @param criteria
+		 * @returns {T} - The removed element
+		 */
 
-	/**
-	 * Removes an element by searching for it using a criteria, like a cherry pick.
-	 * @param id
-	 * @param criteria
-	 */
+		protected remove(id: number | string): T;
 
-	protected cherryPickRemove(id: Hashable, criteria: (value) => boolean): T;
+		/**
+		 * Removes all the element that match with the provided id.
+		 * @param id
+		 */
 
-	/**
-	 * Checks if there are elements in queue that match
-	 * with the criteria.
-	 * @param criteria
-	 * @returns {boolean} - True if there are elements, false otherwise.
-	 */
+		protected removeAll(id: number | string): void;
 
-	protected has(id: Hashable): boolean;
+		/**
+		 * Removes an element by searching for it using a criteria, like a cherry pick.
+		 * @param id
+		 * @param criteria
+		 */
 
-	/**
-	 * Retrives all the elements that match the criteria
-	 * @param criteria
-	 * @returns {T[]} - Array of elements
-	 */
+		protected cherryPickRemove(id: number | string, criteria: (value: T) => boolean): T;
 
-	protected all(id: Hashable): T[];
+		/**
+		 * Checks if there are elements in queue that match
+		 * with the criteria.
+		 * @param criteria
+		 * @returns {boolean} - True if there are elements, false otherwise.
+		 */
 
-	/**
-	 * Returns the first element that match the criteria.
-	 * @param criteria
-	 * @return {T} - the first element.
-	 */
+		protected has(id: number | string): boolean;
 
-	protected get(id: Hashable): T;
+		/**
+		 * Retrives all the elements that match the criteria
+		 * @param criteria
+		 * @returns {T[]} - Array of elements
+		 */
 
-	/**
-	 * Pops out the last element of the id's queue.
-	 * @param id
-	 * @returns {T} - the last element
-	 */
+		protected all(id: number | string): T[];
 
-	protected pop(id: Hashable): T;
+		/**
+		 * Returns the first element that match the criteria.
+		 * @param criteria
+		 * @return {T} - the first element.
+		 */
 
-	/**
-	 * Wipes out all the queue.
-	 * @param id - If has an id, id's queue will be wiped out.
-	 * All the queues will otherwise.
-	 */
+		protected get(id: number | string): T;
 
-	protected emptyQueue(id?: Hashable): number;
-}
+		/**
+		 * Pops out the last element of the id's queue.
+		 * @param id
+		 * @returns {T} - the last element
+		 */
 
-declare class ReplyManager extends QueueManager<Reply> {
+		protected pop(id: number | string): T;
 
-	/**
-	 * Adds a reply to the queue
-	 * @param id - the ID to which assign the action
-	 * @param action - a callback to register
-	 * @returns {this} - this (ReplyManager)
-	 */
+		/**
+		 * Wipes out all the queue.
+		 * @param id - If has an id, id's queue will be wiped out.
+		 * All the queues will otherwise.
+		 */
 
-	public register(id: Hashable, action: Function): this;
+		protected emptyQueue(id?: number | string): number;
+	}
 
-	/**
-	 * Removes all the replies for this id.
-	 * @param id
-	 * @returns {this} - this
-	 */
+	class ReplyManager extends QueueManager<Reply> {
 
-	public cancelAll(id: Hashable): this;
+		/**
+		 * Adds a reply to the queue
+		 * @param id - the ID to which assign the action
+		 * @param action - a callback to register
+		 * @returns {this} - this (ReplyManager)
+		 */
 
-	/**
-	 * Pops the last reply for this id;
-	 * @param id
-	 */
+		public register(id: number | string, action: Function): this;
 
-	public pop(id: Hashable): Reply;
+		/**
+		 * Removes all the replies for this id.
+		 * @param id
+		 * @returns {this} - this
+		 */
 
-	/**
-	 * Checks if a specific id has some left replies
-	 * @param id
-	 */
+		public cancelAll(id: number | string): this;
 
-	public expects(id: Hashable): boolean;
+		/**
+		 * Pops the last reply for this id;
+		 * @param id
+		 */
 
-	/**
-	 * Fires the first reply for a specific id,
-	 * passing to it some optional arbitrary data
-	 * @param id
-	 * @param data
-	 */
+		public pop(id: number | string): Reply;
 
-	public execute(id: Hashable, data?: ReplyData);
+		/**
+		 * Checks if a specific id has some left replies
+		 * @param id
+		 */
 
-	/**
-	 * Skips the current reply expectation
-	 * only if there is at least one next
-	 * @param id - specific identifier
-	 * @returns {boolean} - check result
-	 */
+		public expects(id: number | string): boolean;
 
-	public skip(id: Hashable): boolean;
+		/**
+		 * Fires the first reply for a specific id,
+		 * passing to it some optional arbitrary data
+		 * @param id
+		 * @param data
+		 */
 
-	/**
-	 * Fetch all the pending replies for this id
-	 * @param id
-	 * @returns {Reply[]} - all the replies
-	 */
+		public execute(id: number | string, data?: ReplyData): void;
 
-	public pending(id: Hashable): Reply[];
-}
+		/**
+		 * Skips the current reply expectation
+		 * only if there is at least one next
+		 * @param id - specific identifier
+		 * @returns {boolean} - check result
+		 */
 
-declare class OperationManager extends QueueManager<Operation> {
+		public skip(id: number | string): boolean;
 
-	public maxConcurrent: number;
+		/**
+		 * Fetch all the pending replies for this id
+		 * @param id
+		 * @returns {Reply[]} - all the replies
+		 */
 
-	/**
-	 * Adds a new operation to the queue.
-	 * @param id
-	 * @param command
-	 * @param callback
-	 */
+		public pending(id: number | string): Reply[];
+	}
 
-	public register(id: Hashable, command: string, callback?: Function): any;
+	class OperationManager extends QueueManager<Operation> {
 
-	/**
-	 * Cancels the current action or a specific action for a specific id
-	 * @param id
-	 * @param commandName - name to be used to identify a specific element to be removed.
-	 * @return {Operations} - the cancelled operation
-	 */
+		public maxConcurrent: number;
 
-	public end(id: Hashable, commandName?: string): Operation;
+		/**
+		 * Adds a new operation to the queue.
+		 * @param id
+		 * @param command
+		 * @param callback
+		 */
 
-	/**
-	 * Fetches all the current queued operations for a specific identifier.
-	 * @param id
-	 */
+		public register(id: number | string, command: string, callback?: Function): any;
 
-	public onGoing(id: Hashable): Operation[];
+		/**
+		 * Cancels the current action or a specific action for a specific id
+		 * @param id
+		 * @param commandName - name to be used to identify a specific element to be removed.
+		 * @return {Operations} - the cancelled operation
+		 */
 
-	/**
-	 * Checks if the current identifier has an ongoing operations
-	 * @param id
-	 * @returns {boolean} - The result of the check
-	 */
+		public end(id: number | string, commandName?: string): Operation;
 
-	public hasActive(id: Hashable): boolean;
+		/**
+		 * Fetches all the current queued operations for a specific identifier.
+		 * @param id
+		 */
 
-	/**
-	 * Wipes out all the operation queue.
-	 */
+		public onGoing(id: number | string): Operation[];
 
-	public empty(): boolean;
+		/**
+		 * Checks if the current identifier has an ongoing operations
+		 * @param id
+		 * @returns {boolean} - The result of the check
+		 */
+
+		public hasActive(id: number | string): boolean;
+
+		/**
+		 * Wipes out all the operation queue.
+		 */
+
+		public empty(): boolean;
+	}
 }

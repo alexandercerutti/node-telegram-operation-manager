@@ -46,7 +46,7 @@ export default class QueueManager<T> {
 	 * @returns boolean
 	 */
 
-	protected cherryPickRemove(id: Hashable, criteria: (value) => boolean): T {
+	protected cherryPickRemove(id: Hashable, criteria: (value: T) => boolean): T {
 		let elementIndex = this._queue[id].findIndex(criteria);
 
 		if (elementIndex === -1) {

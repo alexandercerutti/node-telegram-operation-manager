@@ -2,8 +2,6 @@ export interface QueueObject<T> {
 	[key: string]: T[]
 }
 
-//export type Reply = QueueObject<ReplyDescriptor>;
-//export type Operation = QueueObject<OperationDescriptor>;
 export type Hashable = number | string;
 
 export interface ReplyData {
