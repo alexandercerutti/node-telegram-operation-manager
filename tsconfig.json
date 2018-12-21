@@ -1,0 +1,14 @@
+{
+	"compilerOptions": {
+		"target": "es6",
+		"module": "commonjs",
+		"types": [
+			"node",
+			"node-telegram-bot-api"
+		],
+	},
+	"exclude": [
+		"node_modules/",
+		"src/model.ts"
+	]
+}
