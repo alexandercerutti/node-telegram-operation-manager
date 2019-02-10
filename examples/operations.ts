@@ -42,14 +42,14 @@ bot.onText(/\/operations/, (message) => {
 			.register(message.from.id, (someData?: ReplyData) => {
 				if (someData.text !== "Show me how!") {
 					bot.sendMessage(message.from.id, "Unknown command. Retry with \"Show me how!\".");
-					return false;
+					return { repeat: true };
 				}
 
 				let nextText = "You can `register` an operation as in the following snippet."
 					+ "\nHere I'm assuming you are still using [node-telegram-bot-api](https://github.com/yagop/node-telegram-bot-api)."
 					+ "\n\n```"
 					+ "\nconst Opm = new OperationManager();`"
-					+ "\nbot.onText(/\/yourCommand/, () => {"
+					+ "\nbot.onText(/\\/yourCommand/, () => {"
 					+ "\n\t\tOpm.register(message.from.id, \"yourOperationIdentifier\", function() {"
 					+ "\n\t\t\t\t// Everything in this function is executed immediately after the creation of command is successful."
 					+ "\n\t\t\t\t// If you exceed the limit, the action won't be registered and function not executed."
@@ -72,7 +72,7 @@ bot.onText(/\/operations/, (message) => {
 			.register(message.from.id, (someData?: ReplyData) => {
 				if (someData.text !== "Show me more") {
 					bot.sendMessage(message.from.id, "Unknown command. Retry with \"Show me more\".");
-					return false;
+					return { repeat: true };
 				}
 
 				let nextText = "You can look at the code of this example to see how replies are registered."
@@ -89,14 +89,14 @@ bot.onText(/\/operations/, (message) => {
 			.register(message.from.id, (someData?: ReplyData) => {
 				if (someData.text !== "How can I do that?") {
 					bot.sendMessage(message.from.id, "Unknown command. Retry with \"Show me more\".");
-					return false;
+					return { repeat: true };
 				}
 
 				let nextText = "It's easy! You only have to set this property:"
 					+ "\n\n\t`Opm.maxConcurrent = N;`"
 					+ "\n\nWhere 'N' is the number of max operations you want to let be executed at the same time."
 					+ "\n\nSet it to 0 to allow infinite operations."
-					+ "\n\n\nHope you enjoyed this tutorial. 😉 Thank you for using **operation-manager**."
+					+ "\n\n\nYou are the best! Start now by looking at the [documentation](https://github.com/alexandercerutti/node-telegram-operation-manager#class_operation). 😉 Hope you have enjoyed the tutorial!";
 
 				bot.sendMessage(message.from.id, nextText, Object.assign({ parse_mode: "Markdown" }, keyboards[2].close()));
 			});

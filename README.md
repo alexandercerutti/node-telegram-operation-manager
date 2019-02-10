@@ -64,7 +64,7 @@ $ npm install -D;
 # =========================
 
 $ npm run reply -- 123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11
-
+# or
 $ npm run operations -- 123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11
 ```
 
@@ -142,6 +142,32 @@ It adds a new action to be executed at the next user reply.
 ```javascript
 reply.register(id, action) : this;
 ```
+
+**Description**:
+
+`action` parameter has the following signature:
+
+```typescript
+action: (someData?: ReplyData) => RegisteredResponse
+```
+
+You can pass through the method `execute`, some arbitrary data to be used in the current response. They will appear in `someData`.
+
+It will also include a key, called `previousData`, which will be the data returned from the previous registered replies. If no data is returned from the previous responses, it won't have this key.
+
+To pass datas to the next reply, just return an object with your data.
+
+The default behavior is to remove from the queue the current reply.
+If current **user** reply does not satisfy your conditions, you can make them repeat, by returning:
+
+```javascript
+{
+	repeat: true,
+	someOtherDatas: ...
+}
+```
+
+Omitting `repeat` key or setting it to `false`, will determine the default behavior to be executed.
 
 **Returns**:
 
