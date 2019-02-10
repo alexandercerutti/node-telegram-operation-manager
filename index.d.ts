@@ -16,6 +16,11 @@ declare module "node-telegram-operation-manager" {
 		previousData?: any
 	}
 
+	interface RegisteredResult {
+		repeat?: boolean;
+		[key: string]: any;
+	}
+
 	class QueueManager<T> {
 		/**
 		 * Pushes the element into the queue.
@@ -101,7 +106,7 @@ declare module "node-telegram-operation-manager" {
 		 * @returns {this} - this (ReplyManager)
 		 */
 
-		public register(id: number | string, action: Function): this;
+		public register(id: number | string, action: (data?: ReplyData) => RegisteredResult): this;
 
 		/**
 		 * Removes all the replies for this id.
@@ -191,6 +196,7 @@ declare module "node-telegram-operation-manager" {
 
 		/**
 		 * Wipes out all the operation queue.
+		 * I hope you know what you are doing.
 		 */
 
 		public empty(): boolean;

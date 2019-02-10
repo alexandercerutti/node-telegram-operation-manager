@@ -13,6 +13,11 @@ export interface Operation {
 }
 
 export interface Reply {
-	action: Function,
+action: (data?: ReplyData) => RegisteredResult | undefined | void,
 	previousData?: any
+}
+
+export interface RegisteredResult {
+	repeat?: boolean;
+	[key: string]: any;
 }

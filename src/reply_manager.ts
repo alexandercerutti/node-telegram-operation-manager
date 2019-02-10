@@ -1,4 +1,4 @@
-import { Reply, Hashable, ReplyData } from "./model";
+import { Reply, Hashable, ReplyData, RegisteredResult } from "./model";
 import QueueManager from "./queue_manager";
 
 export default class ReplyManager extends QueueManager<Reply> {
@@ -14,7 +14,7 @@ export default class ReplyManager extends QueueManager<Reply> {
 	 * @returns {number} - the amount of actions added under a specific identifier.
 	 */
 
-	register(id: Hashable, action: Function): this {
+	register(id: Hashable, action: (data?: ReplyData) => RegisteredResult | undefined | void): this {
 		this.push(id, { action });
 
 		return this;
@@ -58,24 +58,40 @@ export default class ReplyManager extends QueueManager<Reply> {
 
 	execute(id: Hashable, data: ReplyData = {}): void {
 		let next: Reply = this.get(id);
-		let callback: Function = next.action;
+		let callback = next.action;
 
 		// Passing the previous data to the function
+		// We are setting the previousData below
 		data.previousData = next.previousData || undefined;
 
 		let result = callback(data);
 
-		// Must not be removed if result is specifically false.
-		if (result !== false) {
-			// Removing
-			this.remove(id);
-			let nextReply = this.get(id)
+		// We want to allow a successful execution in case of:
+		// a. Missing result (undefined)
+		// b. Object but not array result
+		// c. Object with a falsy repeat property
+		// d. Object without repeat property
 
-			// this.get returns an empty object if there is no other reply in the id's queue.
+		if (result === undefined) {
+			this.remove(id);
+			return;
+		}
+
+		if (typeof result === "object" && !Array.isArray(result)) {
+			if (!result.repeat) {
+				// if we have to want to repeat, we have to shift the reply
+				this.remove(id);
+			}
+
+			let nextReply = this.get(id);
+
+			// this.get returns an empty object if there
+			// is no other reply in the id's queue.
 			if (!Object.keys(nextReply).length) {
 				return;
 			}
 
+			delete result.repeat; // even if it does not exists
 			nextReply.previousData = result;
 		}
 	}
