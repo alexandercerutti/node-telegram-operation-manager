@@ -5,12 +5,14 @@
   "main": "index.js",
   "scripts": {
     "reply": "node examples/reply.js",
-    "prereply": "tsc",
+    "prereply": "npm run build",
     "operations": "node examples/operations.js",
-    "preoperations": "tsc",
-    "prepublishOnly": "tsc",
+    "preoperations": "npm run build",
+    "prepublishOnly": "npm run build",
     "test": "jasmine --config=tests/support/jasmine.json",
-    "pretest": "tsc"
+    "pretest": "npm run build",
+    "build": "tsc",
+    "prebuild": "command -v tsc || npm install -g typescript"
   },
   "keywords": [
     "node",
