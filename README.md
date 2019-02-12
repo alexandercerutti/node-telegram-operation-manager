@@ -437,8 +437,8 @@ opm.hasActive(id) : boolean;
 
 Checks whether the limit of concurrent operations has been reached.
 
-```javascript
-opm.hasReachedMaximum(id);
+```typescript
+opm.hasReachedMaximum(id): boolean;
 ```
 
 **Arguments**:

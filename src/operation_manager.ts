@@ -69,7 +69,7 @@ export default class OperationManager extends QueueManager<Operation> {
 	 * @returns {boolean} The result in boolean
 	 */
 
-	hasReachedMaximum(id: Hashable) {
+	hasReachedMaximum(id: Hashable): boolean {
 		const opsAmount = this.all(id).length;
 		return opsAmount > 0 && opsAmount <= this._maxConcurrent;
 	}
