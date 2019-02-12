@@ -1,6 +1,6 @@
 {
   "name": "node-telegram-operation-manager",
-  "version": "1.0.2",
+  "version": "1.2.0",
   "description": "A suite to manage replies and operations in telegram bot written in node.js",
   "main": "index.js",
   "scripts": {
