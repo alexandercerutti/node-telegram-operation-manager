@@ -72,12 +72,12 @@ export default class ReplyManager extends QueueManager<Reply> {
 		// c. Object with a falsy repeat property
 		// d. Object without repeat property
 
-		if (result === undefined) {
+		if (result === undefined || result === null) {
 			this.remove(id);
 			return;
 		}
 
-		if (typeof result === "object" && !Array.isArray(result)) {
+		if (result && typeof result === "object" && !Array.isArray(result)) {
 			if (!result.repeat) {
 				// if we have to want to repeat, we have to shift the reply
 				this.remove(id);
