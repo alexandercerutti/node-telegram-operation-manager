@@ -1,5 +1,7 @@
 # Node Telegram Operation Manager
 
+This is amazing project.
+
 This package purpose is to help managing the operations in Telegram bots in Node.js.
 
 ## Installation
