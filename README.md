@@ -1,3 +1,8 @@
+# DEPRECATION NOTICE
+
+After several years since its creation and latest publised version, I've decided to deprecate this package as this was born as a personal need while developing bots.
+Moreover, this package does not even provide a correct support for asyncronous operations and therefore cannot be considered "modern" at all, IMHO.
+
 # Node Telegram Operation Manager
 
 This package purpose is to help managing the operations in Telegram bots in Node.js.
